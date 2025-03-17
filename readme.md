@@ -5,6 +5,7 @@
 
 [![Under Development](https://img.shields.io/badge/status-beta-orange)](https://github.com/yourusername/dicedb.js)
 [![npm version](https://img.shields.io/npm/v/dicedb.js)](https://www.npmjs.com/package/dicedb.js)
+[![wakatime](https://wakatime.com/badge/user/fa03c794-b19f-4f4d-b502-abbb422b18c4/project/ca210174-5a87-4e84-b816-5e82cd5be0d2.svg)](https://wakatime.com/badge/user/fa03c794-b19f-4f4d-b502-abbb422b18c4/project/ca210174-5a87-4e84-b816-5e82cd5be0d2)
 
 ---
 
