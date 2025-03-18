@@ -43,12 +43,12 @@ export function setOptsToCommand(
 ) {
     const command: Record<CommandOptions, any> = {} as any
 
-    if (options?.expiresSec) {
-        command['EX'] = options.expiresSec
+    if (options?.sec) {
+        command['EX'] = options.sec
     }
 
-    if (options?.expiresMs) {
-        command['PX'] = options.expiresMs
+    if (options?.ms) {
+        command['PX'] = options.ms
     }
 
     if (options?.expireAt) {
@@ -59,11 +59,11 @@ export function setOptsToCommand(
         command['PXAT'] = options.expireAtMs
     }
 
-    if (options?.onlyIfExists) {
+    if (options?.ifExists) {
         command['XX'] = ''
     }
 
-    if (options?.onlyIfNotExists) {
+    if (options?.ifNotExists) {
         command['NX'] = ''
     }
 
@@ -83,12 +83,12 @@ export function getExOptsToCommand(
 ) {
     const command: Record<CommandOptions, any> = {} as any
 
-    if (options?.expiresSec) {
-        command['EX'] = options?.expiresSec
+    if (options?.sec) {
+        command['EX'] = options?.sec
     }
 
-    if (options?.expiresMs) {
-        command['PX'] = options?.expireAtMs
+    if (options?.ms) {
+        command['PX'] = options?.ms
     }
 
     if (options?.expireAt) {
@@ -111,7 +111,7 @@ export function expireOptsToCommand(options?: ExpireOptions) {
         "NX": ""
     } as any;
 
-    if(options?.onlyIfExists) {
+    if(options?.ifExists) {
         delete command["NX"]
         command["XX"] = ""
     }

@@ -9,3 +9,9 @@ export class DiceCommandErr extends Error {
         super(message)
     }
 }
+
+export class DiceError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}

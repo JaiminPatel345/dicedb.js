@@ -59,12 +59,12 @@ client.close();
 | TTL      | `.ttl(key)`             | `await client.ttl('key')`            |
 | TYPE     | `.type(key)`            | `await client.type('key')`           |
 
-## 🚧 Pending Features
+## 🚧 Features
 
-- `WATCH` / `UNWATCH` support
-- Automatic reconnection logic
-- Connection pooling
-- Comprehensive test coverage
+- ✅ Auto Reconnection
+- ❌ `WATCH` / `UNWATCH` support
+- ❌ Connection pooling
+- ❌ Comprehensive test coverage
 
 ## 🔌 Connection Management
 

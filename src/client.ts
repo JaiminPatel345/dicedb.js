@@ -8,7 +8,7 @@ import type {
     SetOptions,
 } from './types.js'
 
-import { DiceCommandErr, DiceConnectionErr } from './errors.js'
+import { DiceCommandErr, DiceConnectionErr, DiceError } from './errors.js'
 import {
     cmdDecr,
     cmdDel,
@@ -32,6 +32,11 @@ class Dice {
     private port: number // The port number to connect to.
     private socket: net.Socket // The socket instance for network communication .
     private queue: QueueItem[] // A queue to for managing commands.
+    private reconnectAttempts: number = 0
+    private maxReconnectAttempts: number = 5
+    private reconnectDelay: number = 1000
+    private handshakeCompleted: boolean = false
+
     constructor(options: DiceConnectionOptions) {
         this.host = options.host
         this.port = options.port
@@ -43,6 +48,18 @@ class Dice {
         this.socket.on('data', data => {
             this.handleIncoming(data)
         })
+
+        this.socket.on('close', () => {
+            if (this.handshakeCompleted) {
+                this.handleDisconnect() // If handshake is completed and somehow disconnected from the server
+            }
+        })
+
+        this.socket.on('error', err => {
+            if (this.handshakeCompleted) {
+                this.handleError(err) // If handshake is completed and somehow disconnected from the server
+            }
+        })
     }
 
     private enqueue(item: QueueItem) {
@@ -51,6 +68,28 @@ class Dice {
 
     private dequeue() {
         this.queue.pop()
+    }
+
+    private handleError(err: Error) {
+        this.close()
+        throw new DiceError(
+            `Something went wrong and connection closed: ${err.message}`,
+        )
+    }
+
+    private handleDisconnect() {
+        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+            throw new DiceConnectionErr(
+                `Failed to reconnect after ${this.maxReconnectAttempts} tries`,
+            )
+        }
+
+        setTimeout(() => {
+            this.reconnectAttempts++
+            this.connect()
+        }, this.reconnectDelay)
+
+        this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30 * 1000)
     }
 
     private handleIncoming(buffer: Buffer) {
@@ -119,6 +158,7 @@ class Dice {
 
                     if (ack.includes('OK')) {
                         clearTimeout(handshakeTimeout)
+                        this.handshakeCompleted = true
                         console.log('Handshake successfull')
                         resolve()
                     } else {
@@ -293,12 +333,12 @@ class Dice {
 
     /**
      * This function is used to get number of keys which exists in db without modifying them.
-     * 
+     *
      * @example
      * // Increment by 1
      * const resp = await dice.exists("foo", "bar", "whoo")
      * // Only foo and bar is there in DiceDB.
-     * console.log(resp.ack) // ouputs with : 2 
+     * console.log(resp.ack) // ouputs with : 2
      */
     exists(...keys: string[]) {
         return cmdExists({
