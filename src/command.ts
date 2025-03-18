@@ -131,6 +131,14 @@ export function cmdType(options: Partial<CommandExecOptions>) {
     return commandExec({
         ...options,
         command: 'TYPE',
-        args: [options?.key]
+        args: [options?.key],
+    })
+}
+
+export function cmdWatch(options: Partial<CommandExecOptions>) {
+    return commandExec({
+        ...options,
+        command: 'GET.WATCH',
+        args: [options?.key],
     })
 }

@@ -2,6 +2,7 @@ import net from 'net'
 
 import type {
     DiceConnectionOptions,
+    DiceResponse,
     ExpireOptions,
     GetExOptions,
     QueueItem,
@@ -25,6 +26,7 @@ import {
 } from './command.js'
 import { generateID } from './utils.js'
 import { deserializeResponse, serialize } from './protocol.js'
+import DiceWatch from './watch.js'
 
 class Dice {
     // Private properties
@@ -36,7 +38,8 @@ class Dice {
     private maxReconnectAttempts: number = 5
     private reconnectDelay: number = 1000
     private handshakeCompleted: boolean = false
-
+    private isGracefullClose: boolean = false
+    private watchClient: DiceWatch
     constructor(options: DiceConnectionOptions) {
         this.host = options.host
         this.port = options.port
@@ -50,7 +53,7 @@ class Dice {
         })
 
         this.socket.on('close', () => {
-            if (this.handshakeCompleted) {
+            if (this.handshakeCompleted && !this.isGracefullClose) {
                 this.handleDisconnect() // If handshake is completed and somehow disconnected from the server
             }
         })
@@ -155,7 +158,6 @@ class Dice {
                     const ack = data.toString('utf-8')
 
                     if (ack.includes('OK')) {
-                        clearTimeout(handshakeTimeout)
                         this.handshakeCompleted = true
                         resolve()
                     } else {
@@ -346,6 +348,18 @@ class Dice {
         })
     }
 
+    async watch(key: string) {
+        if (!this.watchClient) {
+            this.watchClient = new DiceWatch({
+                host: this.host,
+                port: this.port,
+            })
+            await this.watchClient.connect()
+        }
+        await this.watchClient.watch(key)
+        return this.watchClient
+    }
+
     expire(key: string, opts?: ExpireOptions) {
         return cmdExpire({
             conn: this.socket,
@@ -392,6 +406,7 @@ class Dice {
     }
 
     close() {
+        this.isGracefullClose = true
         this.socket.end()
     }
 }

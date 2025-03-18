@@ -1,5 +1,6 @@
 import Dice from './client.js'
 import DicePool from './pool.js'
+import DiceWatch from './watch.js'
 import type {
     DiceConnectionOptions,
     Commands,
@@ -9,7 +10,7 @@ import type {
     DiceResponse,
 } from './types.js'
 
-export { Dice, DicePool }
+export { Dice, DicePool, DiceWatch }
 export type {
     DiceConnectionOptions,
     Commands,

@@ -198,19 +198,21 @@ export class Response extends jspb.Message {
                     message.setVBytes(reader.readBytes())
                     break
                 case 7:
-                    let struct = new google_protobuf_struct_pb.Struct()
+                    let struct = new google_protobuf_struct_pb.default.Struct()
                     reader.readMessage(
                         struct,
-                        google_protobuf_struct_pb.Struct
+                        google_protobuf_struct_pb.default.Struct
                             .deserializeBinaryFromReader,
                     )
                     message.setAttrs(struct)
+
                     break
                 case 8:
-                    let value = new google_protobuf_struct_pb.Value()
+
+                    let value = new google_protobuf_struct_pb.default.Value()
                     reader.readMessage(
                         value,
-                        google_protobuf_struct_pb.Value
+                        google_protobuf_struct_pb.default?.Value
                             .deserializeBinaryFromReader,
                     )
                     message.addVList(value)
