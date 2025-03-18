@@ -1,6 +1,6 @@
 {
   "name": "dicedb.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -16,6 +16,9 @@
   },
   "license": "ISC",
   "type": "module",
+  "dependencies": {
+    "google-protobuf": "^3.21.4"
+  },
   "devDependencies": {
     "@bufbuild/protobuf": "^2.2.3",
     "@types/google-protobuf": "^3.15.12",
@@ -27,7 +30,6 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "google-protobuf": "^3.21.4",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
     "ts-protoc-gen": "^0.15.0",

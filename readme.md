@@ -58,12 +58,14 @@ client.close();
 | FLUSHDB  | `.flush()`              | `await client.flush()`               |
 | TTL      | `.ttl(key)`             | `await client.ttl('key')`            |
 | TYPE     | `.type(key)`            | `await client.type('key')`           |
+| GET.WATCH     | `.watch(key)`            | `await client.watch('key')`           |
+
 
 ## 🚧 Features
 
 - ✅ Auto Reconnection
 - ✅ Connection pooling
-- ❌ `WATCH` / `UNWATCH` support
+- ✅ `WATCH` / `UNWATCH` support
 - ❌ Comprehensive test coverage
 
 ## 🔌 Connection Management

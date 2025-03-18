@@ -68,9 +68,6 @@ class DiceWatch extends EventEmitter {
     }
 
     emit<K extends keyof WatchEvents>(event: K, ...args: [WatchEvents[K]]) {
-        console.log(
-            `📡 Attempting to emit event: '${event}', Listeners Count: ${this.listenerCount(event)}`,
-        )
         return super.emit(event, ...args)
     }
 
