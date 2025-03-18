@@ -62,8 +62,8 @@ client.close();
 ## 🚧 Features
 
 - ✅ Auto Reconnection
+- ✅ Connection pooling
 - ❌ `WATCH` / `UNWATCH` support
-- ❌ Connection pooling
 - ❌ Comprehensive test coverage
 
 ## 🔌 Connection Management
