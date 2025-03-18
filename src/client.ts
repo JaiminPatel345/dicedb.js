@@ -134,8 +134,6 @@ class Dice {
             this.socket.connect({ port: this.port, host: this.host })
 
             this.socket.once('connect', () => {
-                console.log(`Connected to ${this.host}:${this.port}`)
-
                 const handshake = serialize(
                     'HANDSHAKE',
                     generateID(),
@@ -159,7 +157,6 @@ class Dice {
                     if (ack.includes('OK')) {
                         clearTimeout(handshakeTimeout)
                         this.handshakeCompleted = true
-                        console.log('Handshake successfull')
                         resolve()
                     } else {
                         this.socket.end()

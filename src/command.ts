@@ -34,7 +34,7 @@ export function cmdGet(
 
     return commandExec({
         ...options,
-        command: isDel ? 'GETDEL' : 'DEL',
+        command: isDel ? 'GETDEL' : 'GET',
         args: [key],
     })
 }

@@ -3,6 +3,7 @@ import type {
     CommandExecutorOptions,
     CommandOptions,
     Commands,
+    DiceResponse,
     ExpireOptions,
     GetExOptions,
     SetOptions,
@@ -10,7 +11,7 @@ import type {
 import { DiceCommandErr } from './errors.js'
 import { serialize } from './protocol.js'
 
-export function commandExec(opts: CommandExecutorOptions) {
+export function commandExec(opts: CommandExecutorOptions): Promise<DiceResponse> {
     return new Promise((resolve, reject) => {
         opts.enqueue([resolve, reject])
 

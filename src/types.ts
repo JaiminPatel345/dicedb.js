@@ -1,4 +1,5 @@
 import net from 'net'
+import { Response } from './cmd'
 
 export interface DiceConnectionOptions {
     host: string
@@ -84,4 +85,9 @@ export interface ExpireOptions {
     ifExists?: boolean // Set the expiration only if the key already has an expiration time.
     gt?: number // Set the expiration only if the key already has an expiration time and the new expiration time is greater than the current expiration time.
     lt?: number // Set the expiration only if the key already has an expiration time and the new expiration time is less than the current expiration time.
+}
+
+export interface DiceResponse {
+    ack: string
+    response: Response
 }
