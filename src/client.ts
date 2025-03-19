@@ -360,12 +360,13 @@ class Dice {
         return this.watchClient
     }
 
-    expire(key: string, opts?: ExpireOptions) {
+    expire(key: string, second: number, opts?: ExpireOptions) {
         return cmdExpire({
             conn: this.socket,
             enqueue: this.enqueue.bind(this),
             dequeue: this.dequeue.bind(this),
             key: key,
+            value: second,
             options: opts,
         })
     }

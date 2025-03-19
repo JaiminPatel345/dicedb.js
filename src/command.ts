@@ -87,7 +87,7 @@ export function cmdExists(
 }
 
 export function cmdExpire(
-    options: Omit<Partial<CommandExecOptions>, 'value'> & {
+    options: Partial<CommandExecOptions> & {
         options: ExpireOptions
     },
 ) {
@@ -96,8 +96,8 @@ export function cmdExpire(
 
     return commandExec({
         ...options,
-        command: 'EXPIRE',
-        args: [options.key, ...opts],
+        command: cmd,
+        args: [options.key, options.value, ...opts],
     })
 }
 

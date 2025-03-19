@@ -3,12 +3,10 @@ import { DiceError } from './errors.js'
 import { Commands } from './types.js'
 
 export function serialize(command: Commands, ...args: string[]) {
-
     const cmd = new Command(
         command,
         args?.map(arg => `${arg}`),
     )
-
 
     return cmd.serializeBinary()
 }
@@ -20,7 +18,7 @@ export function deserializeResponse(buffer: Buffer) {
 
     const response = Response.deserializeBinary(new Uint8Array(buffer))
     const data =
-        response.getVStr() || response.getVInt() || response.getVFloat()
+        response.getVStr() ?? response.getVFloat() ?? response.getVInt()
 
     return {
         ack: data,

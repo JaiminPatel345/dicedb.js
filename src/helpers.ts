@@ -15,6 +15,8 @@ export function commandExec(opts: CommandExecutorOptions): Promise<DiceResponse>
     return new Promise((resolve, reject) => {
         opts.enqueue([resolve, reject])
 
+        console.log(opts.command, ...opts.args)
+
         const command = serialize(opts.command, ...opts.args)
         writer(opts.conn, command, opts.command, opts.dequeue, reject)
     })
@@ -127,5 +129,5 @@ export function expireOptsToCommand(options?: ExpireOptions) {
         command["LT"] = `${options?.lt}`
     }
 
-    return Object.entries(command).flat()
+    return Object.entries(command).flat().filter(cmd => !!cmd)
 }

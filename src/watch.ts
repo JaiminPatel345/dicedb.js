@@ -187,9 +187,12 @@ class DiceWatch extends EventEmitter {
     }
 
     close() {
-        this.isGracefullClose = true
-        this.unwatch() // This will unsubscribe from the watch if any exists
-        this.socket.end()
+        return new Promise(async resolve => {
+            this.isGracefullClose = true
+            await this.unwatch() // This will unsubscribe from the watch if any exists
+            this.socket.end()
+            resolve(true)
+        })
     }
 }
 

@@ -9,8 +9,16 @@ import type {
     ExpireOptions,
     DiceResponse,
 } from './types.js'
+import { DiceError, DiceCommandErr, DiceConnectionErr } from './errors.js'
 
-export { Dice, DicePool, DiceWatch }
+export {
+    Dice,
+    DicePool,
+    DiceWatch,
+    DiceError,
+    DiceCommandErr,
+    DiceConnectionErr,
+}
 export type {
     DiceConnectionOptions,
     Commands,
