@@ -39,7 +39,6 @@ class Dice {
     private reconnectDelay: number = 1000
     private handshakeCompleted: boolean = false
     private isGracefullClose: boolean = false
-    private watchClient: DiceWatch
     constructor(options: DiceConnectionOptions) {
         this.host = options.host
         this.port = options.port
@@ -49,6 +48,7 @@ class Dice {
         this.handleIncoming = this.handleIncoming.bind(this)
 
         this.socket.on('data', data => {
+            // console.log(`Queue length : `, this.queue.length)
             this.handleIncoming(data)
         })
 
@@ -96,8 +96,10 @@ class Dice {
     }
 
     private handleIncoming(buffer: Buffer) {
+        // console.log("Handling Queue Length : ", this.queue)
         if (this.queue.length) {
             const [resolve, reject] = this.queue.shift()!
+            // console.log("Removed Queue Length : ", this.queue)
 
             const data = deserializeResponse(buffer)
 
@@ -349,15 +351,14 @@ class Dice {
     }
 
     async watch(key: string) {
-        if (!this.watchClient) {
-            this.watchClient = new DiceWatch({
-                host: this.host,
-                port: this.port,
-            })
-            await this.watchClient.connect()
-        }
-        await this.watchClient.watch(key)
-        return this.watchClient
+        const client = new DiceWatch({
+            host: this.host,
+            port: this.port,
+        })
+
+        await client.connect()
+        await client.watch(key)
+        return client
     }
 
     expire(key: string, second: number, opts?: ExpireOptions) {

@@ -57,6 +57,8 @@ class DiceWatch extends EventEmitter {
             ) {
                 this.handleDisconnect()
             }
+
+            this.removeAllListeners()
         })
     }
 
@@ -141,10 +143,10 @@ class DiceWatch extends EventEmitter {
     }
 
     private unwatch() {
-        if (this.isWatching) {
-            const buf = serialize('UNWATCH', this.fignerprint)
+        return new Promise((resolve, reject) => {
+            if (this.isWatching) {
+                const buf = serialize('UNWATCH', this.fignerprint)
 
-            return new Promise((resolve, reject) => {
                 this.socket.write(buf, cb => {
                     if (cb) {
                         reject(
@@ -154,11 +156,14 @@ class DiceWatch extends EventEmitter {
                         )
                     }
                 })
-                resolve('')
+                this.removeAllListeners()
                 this.isHandshakeCompleted = false
                 this.isWatching = false
-            })
-        }
+                resolve('')
+            } else {
+                resolve('')
+            }
+        })
     }
 
     private handleDisconnect() {
@@ -168,9 +173,9 @@ class DiceWatch extends EventEmitter {
             )
         }
 
-        setTimeout(() => {
+        setTimeout(async () => {
             this.reconnectAttempts++
-            this.connect()
+            await this.connect()
         }, this.reconnectDelay)
 
         this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30 * 1000)

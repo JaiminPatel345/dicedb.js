@@ -1,28 +1,27 @@
+
+<img src="https://dicedb.io/dicedb-logo-dark.png" style="width: 350px;" />
+
 # dicedb.js
-*A Node.js SDK for Dicedb.io*
+*A Node.js SDK for [DiceDB](https://dicedb.io), a fast, reactive, in-memory database.*
 
 ---
 
-<!-- [![Under Development](https://img.shields.io/badge/status-beta-orange)](https://github.com/kisshan13/dicedb.js) -->
 [![npm version](https://img.shields.io/npm/v/dicedb.js)](https://www.npmjs.com/package/dicedb.js)
 [![wakatime](https://wakatime.com/badge/user/fa03c794-b19f-4f4d-b502-abbb422b18c4/project/ca210174-5a87-4e84-b816-5e82cd5be0d2.svg)](https://wakatime.com/badge/user/fa03c794-b19f-4f4d-b502-abbb422b18c4/project/ca210174-5a87-4e84-b816-5e82cd5be0d2)
 
----
-
-### 📦 Installation
+## 📦 Installation
 ```bash
 npm install dicedb.js
 ```
 
 ## 🚀 Quick Start
-
 ```js
-import {Dice} from 'dicedb.js';
+import { Dice } from 'dicedb.js';
 
 // Initialize client
 const client = new Dice({
-  host: 'your-dicedb-host', // Replace with your Dicedb host
-  port: 6379,              // Default port
+  host: 'your-dicedb-host', // Replace with your DiceDB host
+  port: 6379,               // Default port
 });
 
 // Connect to server
@@ -43,7 +42,6 @@ client.close();
 ```
 
 ## ✅ Supported Commands
-
 | Command  | Method                  | Example                              |
 |----------|-------------------------|--------------------------------------|
 | SET      | `.set(key, value)`      | `await client.set('key', 'value')`   |
@@ -58,48 +56,69 @@ client.close();
 | FLUSHDB  | `.flush()`              | `await client.flush()`               |
 | TTL      | `.ttl(key)`             | `await client.ttl('key')`            |
 | TYPE     | `.type(key)`            | `await client.type('key')`           |
-| GET.WATCH     | `.watch(key)`            | `await client.watch('key')`           |
+| WATCH    | `.watch(key)`           | `await client.watch('key')`          |
+| UNWATCH    |            |           |
 
+## 📖 Examples
 
-## 🚧 Features
+### 1️⃣ SET & GET Example
+```js
+await client.set('foo', 'bar');
+const value = await client.get('foo');
+console.log(value.ack); // 'bar'
+```
 
-- ✅ Auto Reconnection
-- ✅ Connection pooling
-- ✅ `WATCH` / `UNWATCH` support
-- ✅ Comprehensive test coverage
+### 2️⃣ Incrementing a Counter
+```js
+await client.set('counter', 0);
+await client.incr('counter');
+console.log((await client.get('counter')).ack); // '1'
+```
+
+### 3️⃣ Using EXPIRE
+```js
+await client.set('session', 'active');
+await client.expire('session', { sec: 60 });
+```
+
+### 4️⃣ Deleting a Key
+```js
+await client.del('session');
+```
+
+### 5️⃣ Watching a Key
+```js
+const watch = await client.watch('user:1');
+
+watch.on("data", (data) => {
+  console.log(data);
+})
+```
 
 ## 🔌 Connection Management
-
 ```js
 const client = new Dice({
   host: 'your-dicedb-host',
   port: 6379,
-  // Manual connection control (auto-reconnect not implemented yet)
 });
 
-// Explicitly connect/disconnect
 await client.connect();
 client.close(); // Gracefully close the connection
 ```
 
-## 🔐 Advanced Usage
+## 🚧 Features
+- ✅ Auto Reconnection
+- ✅ Connection Pooling
+- ✅ `WATCH` / `UNWATCH` Support
+- ✅ Comprehensive Test Coverage
 
-### Atomic Operations
-
-```js
-// Atomic increment and expire
-await client.set('counter', '0');
-await client.incr('counter');
-await client.expire('counter', { sec: 30 });
-```
-
-### Batch Operations
-
-```js
-// Batch delete
-const keys = ['temp:1', 'temp:2', 'temp:3'];
-await client.del(...keys);
-```
+## 🔗 Useful Links
+- [DiceDB Official Website](https://dicedb.io)
+- [DiceDB Benchmarks](https://dicedb.io/benchmarks)
+- [DiceDB Commands](https://dicedb.io/commands/get)
+- [DiceDB GitHub](https://github.com/dicedb/dice)
+- [DiceDB Discord](https://discord.gg/6r8uXWtXh7)
+- [Follow DiceDB on Twitter](https://twitter.com/thedicedb)
 
 ## ⚠️ Development Status
 This SDK is **actively in development.**
