@@ -50,9 +50,9 @@ io.on("connection", (socket) => {
         const isWatchSessionExists = watch.get(key)
 
         if (!isWatchSessionExists) {
-            const watch = await dice.watch(key)
+            const w = await dice.watch(key)
 
-            watch.on("data", (ack) => {
+            w.on("data", (ack) => {
                 if (ack) {
                     const json = JSON.parse(ack)
                     const sender = json["id"]
@@ -63,6 +63,8 @@ io.on("connection", (socket) => {
                     })
                 }
             })
+
+            watch.set(key, w)
         }
 
         const listeners = map.get(key)
@@ -90,20 +92,6 @@ io.on("connection", (socket) => {
             await setMessage(key, { type: "greet", data: `${name} has left the chat`, id: id, name: name })
             console.log(`${name} ${id} disconnectedd`)
         })
-
-        // socket.on("disconnect", async () => {
-        //     socket.removeAllListeners()
-        //     await dice.decr(``)
-        //     let count = await dice.get(`room:${key}`)
-        //     console.log(count.ack)
-        //     await watch.close()
-        //     await dice.decr(`room:${key}`)
-        //     count = await dice.get(`room:${key}`)
-        //     console.log(count.ack)
-        //     const info = await dice.set(key, JSON.stringify({ id: id, data: `${name} has left the chat`, type: "greet", count: count.ack }), { get: true })
-        //     console.log(info.ack)
-        //     console.log(`${name} ${id} Disconnected`)
-        // });
     });
 })
 
